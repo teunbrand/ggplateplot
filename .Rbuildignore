@@ -3,3 +3,5 @@
 ^ggplateplot\.Rproj$
 ^LICENSE\.md$
 ^README\.Rmd$
+^\.github$
+^codecov\.yml$
