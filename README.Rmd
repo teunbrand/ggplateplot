@@ -13,23 +13,29 @@ knitr::opts_chunk$set(
   dev       = "ragg_png",
   dpi       = 132
 )
+set.seed(42)
 ```
 
 # ggplateplot
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/teunbrand/ggplateplot/workflows/R-CMD-check/badge.svg)](https://github.com/teunbrand/ggplateplot/actions)
+[![Codecov test coverage](https://codecov.io/gh/teunbrand/ggplateplot/branch/master/graph/badge.svg)](https://app.codecov.io/gh/teunbrand/ggplateplot?branch=master)
+[![CRAN status](https://www.r-pkg.org/badges/version/ggplateplot)](https://CRAN.R-project.org/package=ggplateplot)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
 Well, well, well... it seems you've found this package for plotting: wells.
 
-The goal of ggplateplot is to extend {ggplot2} to make it easier to make plots resembling cell culture microwell plates. This packages takes care of some of the layouts, leaving the flexibility of {ggplot2} and extensions to add layers, scales, theme adjustments etc.
+The goal of {ggplateplot} is to extend {ggplot2} to make it easier to make plots resembling cell culture microwell plates. This packages takes care of some of the layouts, relying on the flexibility of {ggplot2} and extensions to add layers, scales, theme adjustments et cetera.
 
 ## Installation
 
-You can install the development version of ggplateplot like so:
+You can install the development version of {ggplateplot} like so:
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+# install.packages("remotes")
+remotes::install_github("teunbrand/ggplateplot")
 ```
 
 ## Example
@@ -61,7 +67,9 @@ ggplateplot(df, aes(x, y, fill = values)) +
 
 ## How does it work?
 
-The `ggplateplot()` function above is a thin wrapper around the `ggplot()` function. It does a few automated things to make your plots look more like cell culture plates. Below are some components of the plots above.
+This package is not a package that instantly makes your plots prettier or easier. It is a formatting tool for a very particular kind of plot, of microwell shaped data, in {ggplot2}'s ecosystem.
+
+The `ggplateplot()` function above is a thin wrapper around the `ggplot()` function. It does a few automated things to make your plots look more like cell culture plates. 
 
 ### Geom
 
@@ -96,7 +104,7 @@ p + coord_plate(corner = "topright", spec = 48) +
 
 #### Layout
 
-The `coord_plate()` function has a `specs` argument that takes a description of a well plate. We've included descriptions for 6, 12, 24, 48, 96 and 384-well plates in the package. If we mismatch the number of datapoints with the layout, as in the example below, we might get inappropriate layouts.
+The `coord_plate()` function has a `specs` argument that takes a description of a well plate. We've included descriptions for 6, 12, 24, 48, 96 and 384-well plates in the package. If we mismatch the number of datapoints with the layout, we might get inappropriate layouts. In the example below, we're purposfully giving the wrong layout for the shape of the data to demonstrate that, among other things, the spacing of wells is off.
 
 ```{r coord_plate_spec}
 p + coord_plate(specs = 96)
@@ -144,3 +152,22 @@ ggplateplot(plate, aes(fill = value)) +
   geom_well()
 ```
 
+## Interacting with ggplot2
+
+While {ggplateplot} makes it easier to make plots of plates, it still requires some familiarity with the ggplot2 package. The `ggplateplot()` functions return regular ggplot objects, so they can be combined with the usual functions one can use to manipulate plots. Below is an example of combining it with other {ggplot2} functions. We can use an array instead of matrix input to make variable out of the 3rd dimension, which we can use to create facets.
+
+```{r complete_example}
+m <- array(1:192, dim = c(8, 12, 2))
+
+ggplateplot(m, aes(fill = value)) +
+  geom_point(shape = 24, size = 2.5) +
+  scale_fill_viridis_c() +
+  scale_y_reverse(name = "Rows", labels = LETTERS[1:8]) +
+  facet_wrap(~ Var3) +
+  theme(
+    panel.background = element_rect(colour = "black", fill = NA),
+    panel.grid.major = element_line(colour = "grey90"),
+    panel.grid.minor = element_line(colour = "grey97")
+  ) +
+  labs(x = "Columns")
+```
