@@ -2,13 +2,37 @@
 
 #' Plate plots
 #'
+#' This function is a wrapper for `ggplot()`, that tries to automatically guess
+#' an appropriate shape for a microwell layout based on the data.
+#'
 #' @inheritParams ggplot2::ggplot
 #'
 #' @return A `ggplot` object.
 #' @export
 #'
+#' @details The 'guessing' part happens by looking at the number of observations
+#'   if the `data` argument is a `data.frame`, and the first two dimensions if
+#'   the `data` argument is a `matrix` or `array`. If it does not guess the
+#'   appropriate shape correctly, it might be easier to use
+#'   `ggplot() + ... + coord_shape(spec = ...)` directly.
+#'
+#'   If the `data` argument is an `array` or `matrix`, this is converted to a
+#'   long format `data.frame` and the `x` and `y` aesthetics are populated by
+#'   the first two dimensions of the `data` argument.
+#'
 #' @examples
-#' NULL
+#' # With long-format data
+#' df <- expand.grid(LETTERS[1:2], 1:3)
+#' df$value <- seq_len(nrow(df))
+#'
+#' ggplateplot(df, aes(Var2, Var1, fill = factor(value))) +
+#'   geom_well()
+#'
+#' # With matrices/arrays, cell values become the 'value' column
+#' m <- matrix(1:12, nrow = 3, ncol = 4)
+#'
+#' ggplateplot(m, aes(fill = factor(value))) +
+#'   geom_well()
 ggplateplot <- function(
   data    = NULL,
   mapping = aes(),

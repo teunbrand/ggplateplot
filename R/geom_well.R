@@ -16,7 +16,15 @@
 #' @export
 #'
 #' @examples
-#' NULL
+#' df <- expand.grid(LETTERS[1:3], 1:4)
+#' df$value <- seq_len(nrow(df))
+#'
+#' # A basic plot that just draws circles
+#' p <- ggplot(df, aes(Var2, Var1, fill = value)) +
+#'   geom_well()
+#'
+#' # With plate coordinates, plot resembles microwell plate
+#' p + coord_plate(specs = 12)
 geom_well <- function(
   mapping  = NULL,
   data     = NULL,

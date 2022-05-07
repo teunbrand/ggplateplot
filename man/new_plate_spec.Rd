@@ -53,5 +53,34 @@ plate layout. The \code{custom_plate_spec()} is a wrapper around
 layouts.
 }
 \examples{
-NULL
+# Precisely detail a new layout
+rotated_96well <- new_plate_spec(
+  width         = 85.5,
+  height        = 127.8,
+  well_spacing  = 9,
+  well_diameter = 6.8,
+  ncol          = 8,
+  nrow          = 12
+)
+
+## Setup dummy data
+df <- expand.grid(row = 1:12, col = LETTERS[1:8])
+df$value <- seq_len(nrow(df))
+
+## Use new spec in plot
+ggplot(df, aes(col, row, fill = value)) +
+  geom_well() +
+  coord_plate(spec = rotated_96well)
+
+# Quickly sketch a new layout
+square_2x2 <- custom_plate_spec(ncol = 2, nrow = 2, width = 100, height = 100)
+
+## Setup dummy data
+df <- expand.grid(row = 1:2, col = LETTERS[1:2])
+df$value <- seq_len(nrow(df))
+
+## Use spec in plot
+ggplot(df, aes(col, row, fill = value)) +
+  geom_well() +
+  coord_plate(spec = square_2x2)
 }

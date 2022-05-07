@@ -74,5 +74,13 @@ when combined with \code{coord_plate()}, setting \code{size = 1} is equivalent t
 setting the size to a well's diameter.
 }
 \examples{
-NULL
+df <- expand.grid(LETTERS[1:3], 1:4)
+df$value <- seq_len(nrow(df))
+
+# A basic plot that just draws circles
+p <- ggplot(df, aes(Var2, Var1, fill = value)) +
+  geom_well()
+
+# With plate coordinates, plot resembles microwell plate
+p + coord_plate(specs = 12)
 }

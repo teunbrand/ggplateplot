@@ -55,7 +55,23 @@ The \code{panel.background} theme element now draws a polygon instead
 of a rectangle in case \code{corner != "none"}. Moreover, the \code{panel.grid.major}
 element is used to draw circles at well positions and \code{panel.grid.minor} is
 used to draw regular grid lines. Actual minor breaks are ignored.
+
+The dimensions of most standard plates are roughly based on technical data
+sheets available on the Eppendorf website, a manufacturer of cell culture
+consumables.
 }
 \examples{
-NULL
+# Make basic plot
+df <- data.frame(x = 1:4, y = 1:4)
+
+p <- ggplot(df, aes(x = x, y = y)) +
+  geom_well()
+
+# Using spec and limits to change layout
+p + coord_plate(spec = 96, xlim = c(1, 12), ylim = c(1, 8))
+p + coord_plate(spec = 48, xlim = c(1, 8), ylim = c(1, 6))
+
+# Changing where the corner is placed
+p + coord_plate(spec = 24, xlim = c(1, 6), ylim = c(1, 4),
+                corner = "left")
 }

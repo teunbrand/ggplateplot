@@ -22,8 +22,31 @@ If not specified, must be supplied in each layer added to the plot.}
 A \code{ggplot} object.
 }
 \description{
-Plate plots
+This function is a wrapper for \code{ggplot()}, that tries to automatically guess
+an appropriate shape for a microwell layout based on the data.
+}
+\details{
+The 'guessing' part happens by looking at the number of observations
+if the \code{data} argument is a \code{data.frame}, and the first two dimensions if
+the \code{data} argument is a \code{matrix} or \code{array}. If it does not guess the
+appropriate shape correctly, it might be easier to use
+\code{ggplot() + ... + coord_shape(spec = ...)} directly.
+
+If the \code{data} argument is an \code{array} or \code{matrix}, this is converted to a
+long format \code{data.frame} and the \code{x} and \code{y} aesthetics are populated by
+the first two dimensions of the \code{data} argument.
 }
 \examples{
-NULL
+# With long-format data
+df <- expand.grid(LETTERS[1:2], 1:3)
+df$value <- seq_len(nrow(df))
+
+ggplateplot(df, aes(Var2, Var1, fill = factor(value))) +
+  geom_well()
+
+# With matrices/arrays, cell values become the 'value' column
+m <- matrix(1:12, nrow = 3, ncol = 4)
+
+ggplateplot(m, aes(fill = factor(value))) +
+  geom_well()
 }
