@@ -83,7 +83,8 @@ GeomWell <- ggproto(
 
     # If coord has specifications, adopt size based on well diameter
     if (!is.null(coord$specs)) {
-      size <- size * with(coord$specs, well_diameter / height) / 2
+      mindim <- with(coord$specs, min(width, height))
+      size <- 0.5 * size * coord$specs$well_diameter / mindim
     } else {
 
       # Otherwise, take 1 unit distance on widest axis as size

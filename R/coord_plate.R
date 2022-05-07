@@ -130,7 +130,8 @@ guide_wells <- function(
   )
 
   well_pos <- expand.grid(x = x.major, y = y.major)
-  radius   <- with(specs, 0.5 * well_spacing / height)
+  mindim   <- with(specs, min(height, width))
+  radius   <- 0.5 * (specs$well_spacing / mindim)
   elem     <- calc_element("panel.grid.major", theme)
 
   if (inherits(elem, "element_blank")) {
