@@ -42,6 +42,23 @@ geom_well <- function(
   )
 }
 
+# Keys --------------------------------------------------------------------
+
+draw_key_well <- function(data, params, size) {
+
+  circleGrob(
+    x = 0.5, y = 0.5,
+    r = 0.25 * data$size %||% 1,
+    gp = gpar(
+      col  = alpha(data$colour %||% "black", data$alpha),
+      fill = alpha(data$fill   %||% "black", data$alpha),
+      lwd  = data$stroke   %||% 0.5,
+      lty  = data$linetype %||% 1
+    )
+  )
+}
+
+
 # Class -------------------------------------------------------------------
 
 GeomWell <- ggproto(
@@ -91,5 +108,9 @@ GeomWell <- ggproto(
     # Rename grob
     grob$name <- grobName(grob, "well")
     grob
-  }
+  },
+
+  draw_key = draw_key_well
 )
+
+
