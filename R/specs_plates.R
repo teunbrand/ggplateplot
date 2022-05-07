@@ -161,6 +161,9 @@ choose_wellplate <- function(n) {
     obj  <- get(name, envir = asNamespace("ggplateplot"), mode = "list")
     return(obj)
   } else {
-    stop("Not implemented yet")
+    rlang::abort(paste0(
+      "A layout specification for ", n, " observation(s) ",
+      "has not been implemented."
+    ))
   }
 }
